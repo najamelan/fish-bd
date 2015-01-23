@@ -105,7 +105,6 @@ function bd
         __bd_usage
         return 0
     case '*'
-		set __bd_opts "classic"
         set __bd_arg $argv[1]
     end
 
@@ -119,6 +118,7 @@ function bd
     case 'classic'
         set __bd_newpwd (echo $__bd_oldpwd | sed 's|\(.*/'$__bd_arg'/\).*|\1|')
         set __bd_index  (echo $__bd_newpwd | awk '{ print index($1,"/'$__bd_arg'/"); }')    
+        case '*' # classic
     end
 
     if test $__bd_index = 0
