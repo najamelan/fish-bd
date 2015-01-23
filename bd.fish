@@ -30,8 +30,8 @@ Example:
 
 Options:
     -c\t\tClassic mode : goes back to the first directory named as the string
-	\t\tSet if default using (set -gx BD_OPT 'classic')
-	\t\tDefault mode when BD_OPT or CLI options are specified
+    \t\tSet if default using (set -gx BD_OPT 'classic')
+    \t\tDefault mode when BD_OPT or CLI options are specified
     -s\t\tSeems mode : goes back to the first directory containing string
     \t\tSet it as default using (set -gx BD_OPT 'sensitive')
     -i\t\tCase insensitive move (implies seems mode)
@@ -42,6 +42,7 @@ Options:
     Except for -si/-is for compatibility with the bash version.\n"
 end
 
+
 function bd
 
     set -l __bd_oldpwd (pwd)
@@ -50,79 +51,142 @@ function bd
     set -l __bd_arg
     set -l __bd_opts $BD_OPT
 
+
     switch "$argv[1]"
-    case "[1]"
-        cd ..
-        return 0
-    case "-s"
-        if test "$argv[1]" = "$argv[-1]"
-            echo "No argument."
+
+
+        case "[1]"
+
+            cd ..
+            return 0
+
+
+
+        case "-s"
+
+            if test "$argv[1]" = "$argv[-1]"
+
+                echo "No argument."
+                __bd_usage
+                return 1
+
+            else
+
+                set __bd_opts "sensitive"
+                set __bd_arg $argv[2]
+
+            end
+
+
+        case "-i"
+
+            if test "$argv[1]" = "$argv[-1]"
+
+                echo "No argument."
+                __bd_usage
+                return 1
+
+            else
+
+                set __bd_opts "insensitive"
+                set __bd_arg $argv[2]
+
+            end
+
+
+        case "-si"
+
+            if test "$argv[1]" = "$argv[-1]"
+
+                echo "No argument."
+                __bd_usage
+                return 1
+
+            else
+
+                set __bd_opts "insensitive"
+                set __bd_arg $argv[2]
+
+            end
+
+
+        case "-c"
+
+            if test "$argv[1]" = "$argv[-1]"
+
+                echo "No argument."
+                __bd_usage
+                return 1
+
+            else
+
+                set __bd_opts "classic"
+                set __bd_arg $argv[2]
+
+            end
+
+
+        case "-ci"
+
+            if test "$argv[1]" = "$argv[-1]"
+
+                echo "No argument."
+                __bd_usage
+                return 1
+
+            else
+
+                set __bd_opts "insensitive"
+                set __bd_arg $argv[2]
+
+            end
+
+
+        case '--help'
+
             __bd_usage
-            return 1
-        else
-            set __bd_opts "sensitive"
-            set __bd_arg $argv[2]
-        end
-    case "-i"
-        if test "$argv[1]" = "$argv[-1]"
-            echo "No argument."
-            __bd_usage
-            return 1
-        else
-            set __bd_opts "insensitive"
-            set __bd_arg $argv[2]
-        end
-    case "-si"
-        if test "$argv[1]" = "$argv[-1]"
-            echo "No argument."
-            __bd_usage
-            return 1
-        else
-            set __bd_opts "insensitive"
-            set __bd_arg $argv[2]
-        end
-	case "-c"
-        if test "$argv[1]" = "$argv[-1]"
-            echo "No argument."
-            __bd_usage
-            return 1
-        else
-            set __bd_opts "classic"
-            set __bd_arg $argv[2]
-        end
-	case "-ci"
-        if test "$argv[1]" = "$argv[-1]"
-            echo "No argument."
-            __bd_usage
-            return 1
-        else
-            set __bd_opts "insensitive"
-            set __bd_arg $argv[2]
-        end
-    case '--help'
-        __bd_usage
-        return 0
-    case '*'
-        set __bd_arg $argv[1]
+            return 0
+
+
+        case '*'
+
+            set __bd_arg $argv[1]
+
     end
+
+
 
     switch "$__bd_opts"
-    case "sensitive"
-        set __bd_newpwd (echo $__bd_oldpwd | sed 's|\(.*/'$__bd_arg'[^/]*/\).*|\1|')
-        set __bd_index  (echo $__bd_newpwd | awk '{ print index($0,"/'$__bd_arg'"); }')
-    case "insensitive"
-        set __bd_newpwd (echo $__bd_oldpwd | sed 's|\(.*/'$__bd_arg'[^/]*/\).*|\1|I')
-        set __bd_index  (echo $__bd_newpwd | awk '{ print index(tolower($0),tolower("/'$__bd_arg'")); }')
-    case '*' # classic
-        set __bd_newpwd (echo $__bd_oldpwd | sed 's|\(.*/'$__bd_arg'/\).*|\1|')
-        set __bd_index  (echo $__bd_newpwd | awk '{ print index($1,"/'$__bd_arg'/"); }')
+
+
+        case "sensitive"
+
+            set __bd_newpwd ( echo $__bd_oldpwd | sed 's|\(.*/'$__bd_arg'[^/]*/\).*|\1|'   )
+            set __bd_index  ( echo $__bd_newpwd | awk '{ echo index($0,"/'$__bd_arg'"); }' )
+
+
+        case "insensitive"
+
+            set __bd_newpwd ( echo $__bd_oldpwd | sed 's|\(.*/'$__bd_arg'[^/]*/\).*|\1|I' )
+            set __bd_index  ( echo $__bd_newpwd | awk '{ print index(tolower($0),tolower("/'$__bd_arg'")); }' )
+
+
+        case '*' # classic
+
+            set __bd_newpwd ( echo $__bd_oldpwd | sed 's|\(.*/'$__bd_arg'/\).*|\1|' )
+            set __bd_index  ( echo $__bd_newpwd | awk '{ print index($1,"/'$__bd_arg'/"); }' )
+
     end
+
 
     if test $__bd_index = 0
+
         echo "No such occurence."
+
     end
 
+
     echo "$__bd_newpwd"
-    cd "$__bd_newpwd"
+    cd   "$__bd_newpwd"
 
 end
