@@ -27,15 +27,15 @@ Example:
     # or
     > bd -i P
     # And you are now in /home/user/my/path/
-	
+
 Options:
     -c\t\tClassic mode : goes back to the first directory named as the string
-	\t\tSet if default using (set -gx BD_OPT 'classic')
-	\t\tDefault mode when BD_OPT or CLI options are specified
+    \t\tSet if default using (set -gx BD_OPT 'classic')
+    \t\tDefault mode when BD_OPT or CLI options are specified
     -s\t\tSeems mode : goes back to the first directory containing string
     \t\tSet it as default using (set -gx BD_OPT 'sensitive')
     -i\t\tCase insensitive move (implies seems mode)
-    \t\tSet it as default using (set -gx BD_OPT 'insensitive')    
+    \t\tSet it as default using (set -gx BD_OPT 'insensitive')
     --help\t\tDisplay this help text
 
     Option must be unique and the first argument due to shell limitation.
@@ -123,7 +123,7 @@ function bd
     if test $__bd_index = 0
         echo "No such occurence."
     end
-    
+
     echo "$__bd_newpwd"
     cd "$__bd_newpwd"
 
