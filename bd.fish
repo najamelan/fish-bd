@@ -51,10 +51,6 @@ function bd
     set -l __bd_opts $BD_OPT
 
     switch "$argv[1]"
-    case "[1]"
-        echo "No argument."
-        __bd_usage
-        return 1
     case "-s"
         if test "$argv[1]" = "$argv[-1]"
             echo "No argument."
@@ -94,6 +90,11 @@ function bd
 	case "-ci"
         if test "$argv[1]" = "$argv[-1]"
             echo "No argument."
+        case "[1]"
+
+            cd ..
+            return 0
+
             __bd_usage
             return 1
         else
